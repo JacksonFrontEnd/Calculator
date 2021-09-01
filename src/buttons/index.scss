@@ -1,0 +1,34 @@
+.buttons-container{
+  display: flex;
+  justify-content:center;
+}
+.custom-operation{
+  display: grid;
+  grid-template-rows: auto auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto;
+}
+.base-operation{
+ display: grid;
+ grid-template-rows: auto auto auto auto auto;
+ grid-template-columns: auto auto auto auto;
+}
+.button{
+  width: 100px;
+  height: 100px;
+  background-color: darkgray;
+  border: 1px solid black;
+}
+.operation-last{
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: auto auto auto;
+}
+.big{
+  width: 200px;
+}
+.orange{
+  background-color: orange;
+}
+.numbers{
+  background-color: lightgray;
+}
