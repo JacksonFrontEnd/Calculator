@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",               
+    "allowJs": true,                      
+    "sourceMap": true,                   
+    "outDir": "./dist/",                      
+    "downlevelIteration": true,          
+    "strict": true,                          
+    "noImplicitAny": true,             
+    "moduleResolution": "node",         
+    "esModuleInterop": true,               
+    "skipLibCheck": true,                   
+    "forceConsistentCasingInFileNames": true
+  }
+}
