@@ -5,8 +5,8 @@ export const Buttons = (root: HTMLElement): void => {
   <div class="buttons-container">
     <div>
       <div class="custom-operation">
-        <button class="button" value="brackets">(</button>
-        <button class="button" value="unbrackets">)</button>
+        <button class="button" value="(">(</button>
+        <button class="button" value=")">)</button>
         <button class="button" value="MC">MC</button>
         <button class="button" value="M+" >M+</button>
         <button class="button" value="M-" >M-</button>
@@ -30,7 +30,7 @@ export const Buttons = (root: HTMLElement): void => {
     <div>
       <div class="base-operation">
         <button class="button" value="AC">AC</button>
-        <button class="button" value="plus_or_minus">+/-</button>
+        <button class="button" value="+/-">+/-</button>
         <button class="button" value="%">%</button>
         <button class="button orange" value="/">/</button>
         <button class="button numbers" value="7">7</button>
