@@ -1,4 +1,4 @@
-import "./index.scss";
+import './index.scss';
 
 export const Display = (root: HTMLElement): void => {
   const content = `
@@ -6,7 +6,7 @@ export const Display = (root: HTMLElement): void => {
     <p class="display-field">0</p>
   </div>
   `;
-  const renderContainer = document.createElement("div");
+  const renderContainer = document.createElement('div');
   renderContainer.innerHTML = content;
   root?.appendChild(renderContainer);
 };

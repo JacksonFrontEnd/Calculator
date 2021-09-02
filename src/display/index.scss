@@ -1,9 +1,10 @@
 .display-container{
   height: 10vh;
-  background-color: darkgray;
+  background-color: rgb(49, 49, 49);
   display: flex;
   justify-content:flex-end;
 }
 .display-field{
   font-size: 60px;
+  margin: auto 0;
 }
