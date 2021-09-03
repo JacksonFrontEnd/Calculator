@@ -11,24 +11,8 @@ export function delegationWrapper(): void {
     DISPLAY.value = '0';
     clearFlag = true;
   }
-  function getPriority(s: string) {
-    switch (s) {
-      case '(': return 0;
-      case ')': return 0;
-      case '+': return 3;
-      case '-': return 3;
-      case '*': return 2;
-      case '/': return 2;
-      case '^': return 1;
-      default: return 4;
-    }
-  }
   function isOperator(s: string) {
     if (('+-/*^()'.indexOf(s) !== -1)) return true;
-    return false;
-  }
-  function IsDelimeter(c: string) {
-    if ((' ='.indexOf(c) !== -1)) return true;
     return false;
   }
   function printSymbol(symbol: string) {
@@ -40,34 +24,59 @@ export function delegationWrapper(): void {
       DISPLAY.textContent! += ` ${symbol} `;
     } else DISPLAY.textContent! += symbol;
   }
-  const evaluate = (element:string) => {
-    const stack:string[] = [];
-    const out:string[] = [];
-    const temp = element;
-    const str = temp.split(' ');
-    str?.forEach((elem) => {
-      if (isOperator(elem)) {
-        stack.push(elem);
-        if (elem === ')') {
-          const id1 = stack.indexOf('(');
-          const id2 = stack.indexOf(')');
-          for (let i = id1; i < id2; i++) {
-            out.push(stack[i]);
-          }
-          stack.splice(id1, stack.length - id1);
-        } else if (getPriority(stack[stack.length - 1]) >= getPriority(elem) && stack.length > 1) {
-          out.push(stack.pop()!);
-          console.log(elem);
-          stack.push(elem);
+  function parseCalculationString():string {
+    const calculation = [];
+    let current = '';
+    let ch = '';
+    const s = DISPLAY.textContent;
+    for (let i = 0; ch = s?.charAt(i); i++) {
+      if ('^*/+-'.indexOf(ch!) > -1) {
+        if (current === '' && ch === '-') {
+          current = '-';
+        } else {
+          calculation.push(parseFloat(current), ch);
+          current = '';
         }
       } else {
-        out.push(elem);
+        current += s?.charAt(i);
       }
-    });
-    return out.concat(stack.reverse());
-  };
+    }
+    if (current !== '') {
+      calculation.push(parseFloat(current));
+    }
+    return String(calculation);
+  }
+  function calculate(calc:string):void {
+    const ops = [
+      { '^': (a:number, b:number) => a ** b },
+      { '*': (a:number, b:number) => a * b, '/': (a:number, b:number) => a / b },
+      { '+': (a:number, b:number) => a + b, '-': (a:number, b:number) => a - b }];
+    let newCalc = [];
+    let currentOp;
+    for (let i = 0; i < ops.length; i++) {
+      for (let j = 0; j < calc.length; j++) {
+        if (ops[i][calc[j]]) {
+          currentOp = ops[i][calc[j]];
+        } else if (currentOp) {
+          newCalc[newCalc.length - 1] = currentOp(newCalc[newCalc.length - 1], calc[j]);
+          currentOp = null;
+        } else {
+          newCalc.push(calc[j]);
+        }
+        console.log(newCalc);
+      }
+      calc = newCalc;
+      newCalc = [];
+    }
+    alert(calc);
+    if (calc.length > 1) {
+      console.log('Error: unable to resolve calculation');
+      DISPLAY.textContent = calc;
+    }
+    DISPLAY.textContent = calc[0];
+  }
   function performanceOperation() {
-    alert(evaluate('3 + 4 * 2 / ( 1 - 5 ) ^ 2'));
+    calculate(parseCalculationString());
   }
   function performanceUnaryOperation(unary: string) {
     const number = Number(DISPLAY.value);
