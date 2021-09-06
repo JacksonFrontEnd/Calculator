@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack serve --env development",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test": "jest"
   },
   "author": "Eugene",
   "devDependencies": {
@@ -20,6 +21,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-webpack-plugin": "^2.5.4",
     "html-webpack-plugin": "^5.3.1",
+    "jest": "^27.1.0",
     "mini-css-extract-plugin": "^1.6.0",
     "sass": "^1.32.12",
     "sass-loader": "^11.0.1",

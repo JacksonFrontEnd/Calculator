@@ -1,1 +1,2 @@
-export const stack: number[] = [];
+export const stack:string[] = [];
+export const out:string[] = [];
