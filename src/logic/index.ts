@@ -6,7 +6,12 @@ export function delegationWrapper(): void {
   const MEMORY_OPERATORS = document.querySelectorAll('.memory-operators');
   const EQUAL = document.querySelector('.equal') as HTMLElement;
   let clearFlag = true;
+  let isNull = false;
+  let str = [];
   let memory = 0;
+  let bracketsFlag = false;
+  const stack:string[] = [];
+  const out:string[] = [];
   function clearDisplay() {
     DISPLAY.value = '0';
     clearFlag = true;
@@ -14,6 +19,22 @@ export function delegationWrapper(): void {
   function isOperator(s: string) {
     if (('+-/*^()'.indexOf(s) !== -1)) return true;
     return false;
+  }
+  function divisionMultiplyByZero(num1:number, num2:number) {
+    if (num1 === 0 || num2 === 0) return true;
+    return false;
+  }
+  function getPriority(s: string) {
+    switch (s) {
+      case '(': return 5;
+      case ')': return 4;
+      case '+': return 3;
+      case '-': return 3;
+      case '/': return 2;
+      case '*': return 2;
+      case '^': return 1;
+      default: return 8;
+    }
   }
   function printSymbol(symbol: string) {
     if (clearFlag) {
@@ -24,84 +45,93 @@ export function delegationWrapper(): void {
       DISPLAY.textContent! += ` ${symbol} `;
     } else DISPLAY.textContent! += symbol;
   }
-  function parseCalculationString():string {
-    const calculation = [];
-    let current = '';
-    let ch = '';
-    const s = DISPLAY.textContent;
-    for (let i = 0; ch = s?.charAt(i); i++) {
-      if ('^*/+-'.indexOf(ch!) > -1) {
-        if (current === '' && ch === '-') {
-          current = '-';
+  const evaluate = () => {
+    str = DISPLAY.textContent!.split(' ');
+    str?.forEach((elem) => {
+      if (isOperator(elem)) {
+        if (elem.indexOf('(') !== -1) {
+          bracketsFlag = true;
+        }
+        if (elem.indexOf(')') !== -1) {
+          while (stack[stack.length - 1].indexOf('(') === -1) {
+            out.push(stack.pop()!);
+          }
+          stack.pop();
+        } else if (getPriority(stack[stack.length - 1]) <= getPriority(elem) && stack.length > 1 && !bracketsFlag) {
+          out.push(stack.pop()!);
+          stack.push(elem);
         } else {
-          calculation.push(parseFloat(current), ch);
-          current = '';
+          stack.push(elem);
         }
       } else {
-        current += s?.charAt(i);
+        out.push(elem);
       }
-    }
-    if (current !== '') {
-      calculation.push(parseFloat(current));
-    }
-    return String(calculation);
-  }
-  function calculate(calc:string):void {
-    const ops = [
-      { '^': (a:number, b:number) => a ** b },
-      { '*': (a:number, b:number) => a * b, '/': (a:number, b:number) => a / b },
-      { '+': (a:number, b:number) => a + b, '-': (a:number, b:number) => a - b }];
-    let newCalc = [];
-    let currentOp;
-    for (let i = 0; i < ops.length; i++) {
-      for (let j = 0; j < calc.length; j++) {
-        if (ops[i][calc[j]]) {
-          currentOp = ops[i][calc[j]];
-        } else if (currentOp) {
-          newCalc[newCalc.length - 1] = currentOp(newCalc[newCalc.length - 1], calc[j]);
-          currentOp = null;
-        } else {
-          newCalc.push(calc[j]);
+    });
+    return out.concat(stack.reverse());
+  };
+  function calculate(input: string[]) {
+    let n1;
+    let n2;
+    let res = 0;
+    stack.splice(0, stack.length);
+    input.forEach((elem) => {
+      if (!Number.isNaN(Number(elem))) {
+        stack.push(elem);
+      } else {
+        n2 = Number(stack.pop());
+        n1 = Number(stack.pop());
+        if (divisionMultiplyByZero(n1, n2) && '*/'.indexOf(elem) !== -1) {
+          isNull = true;
         }
-        console.log(newCalc);
+        if (!isNull) {
+          switch (elem) {
+            case '+': res = n1 + n2; break;
+            case '-': res = n1 - n2; break;
+            case '^': res = n1 ** n2; break;
+            case '*': res = n1 * n2; break;
+            case '/': res = n1 / n2; break;
+            default: break;
+          }
+        }
+        stack.push(String(res));
       }
-      calc = newCalc;
-      newCalc = [];
+    });
+    if (isNull) {
+      DISPLAY.textContent = 'недопустимое выражение';
+      setTimeout(clearDisplay, 1500);
+      isNull = false;
+    } else {
+      DISPLAY.textContent = stack.pop()!;
     }
-    alert(calc);
-    if (calc.length > 1) {
-      console.log('Error: unable to resolve calculation');
-      DISPLAY.textContent = calc;
-    }
-    DISPLAY.textContent = calc[0];
   }
   function performanceOperation() {
-    calculate(parseCalculationString());
+    calculate(evaluate());
   }
   function performanceUnaryOperation(unary: string) {
-    const number = Number(DISPLAY.value);
+    str = DISPLAY.textContent!.split(' ');
+    const number = Number(str[str.length - 1]);
     switch (unary) {
       case '2nd':
-        DISPLAY.textContent = String(2 ** number);
+        str[str.length - 1] = String(2 ** number);
         break;
       case 'x2':
-        DISPLAY.textContent = String(number ** 2);
+        str[str.length - 1] = String(number ** 2);
         break;
       case 'x3':
-        DISPLAY.textContent = String(number ** 3);
+        str[str.length - 1] = String(number ** 3);
         break;
       case 'ex':
-        DISPLAY.textContent = String(2.71 ** number);
+        str[str.length - 1] = String(2.71 ** number);
         break;
       case '10x':
-        DISPLAY.textContent = String(10 ** number);
+        str[str.length - 1] = String(10 ** number);
         break;
       case '1/x':
         if (number === 0) {
           DISPLAY.textContent = 'недопустимое выражение';
           setTimeout(clearDisplay, 1500);
         } else {
-          DISPLAY.textContent = String(1 / number);
+          str[str.length - 1] = String(1 / number);
         }
         break;
       case '2√x':
@@ -109,36 +139,31 @@ export function delegationWrapper(): void {
           DISPLAY.textContent = 'недопустимое выражение';
           setTimeout(clearDisplay, 1500);
         } else {
-          DISPLAY.textContent = String(number ** 1 / 2);
+          str[str.length - 1] = String(number ** 1 / 2);
         } break;
       case '3√x':
         if (number < 0) {
           DISPLAY.textContent = 'недопустимое выражение';
           setTimeout(clearDisplay, 1500);
         } else {
-          DISPLAY.textContent = String(number ** 1 / 3);
+          str[str.length - 1] = String(number ** 1 / 3);
         } break;
       case 'Ln':
-        DISPLAY.textContent = String(Math.log(number));
+        str[str.length - 1] = String(Math.log(number));
         break;
       case 'Log10':
-        DISPLAY.textContent = String(Math.log10(number));
+        str[str.length - 1] = String(Math.log10(number));
         break;
       case '+/-':
-        if (Number.isNaN(number)) {
-          DISPLAY.textContent = 'Изменить знак можно только у 1 числа';
-          setTimeout(clearDisplay, 1500);
-        } else {
-          DISPLAY.textContent = String(-number);
-        }
+        str[str.length - 1] = `${Number(str[str.length - 1]) * -1}`;
         break;
       case 'AC':
-        DISPLAY.textContent = '0';
+        str = ['0'];
         clearFlag = true;
         break;
-      default:
-        break;
+      default: break;
     }
+    DISPLAY.textContent = str.join(' ');
   }
   function perfomanceMemoryOperation(memory_operation: string) {
     const number = Number(DISPLAY.value);
@@ -164,7 +189,7 @@ export function delegationWrapper(): void {
   for (let i = 0; i < NUMBERS.length; i++) {
     const number = NUMBERS[i];
     number.addEventListener('click', (e) => {
-      const input = e.target as HTMLElement;
+      const input = e.target as HTMLButtonElement;
       printSymbol(input.textContent!);
     });
   }
@@ -193,61 +218,4 @@ export function delegationWrapper(): void {
   EQUAL.addEventListener('click', () => {
     performanceOperation();
   });
-/* if (DISPLAY.value !== stack[0]) {
-      stack.push(DISPLAY.value);
-    }
-    stack.push(operation);
-    if (stack.length >= 4) {
-      if()
-      switch (stack[1]) {
-        case 'xy':
-          if (Number(stack[0]) === 0) {
-            DISPLAY.textContent = 'недопустимое выражение';
-            setTimeout(clearDisplay, 1500);
-          } else {
-            DISPLAY.textContent = `${Number(stack[0]) ** Number(stack[2])}`;
-          }
-          break;
-        case 'y√x':
-          if (Number(stack[0]) === 0 || Number(stack[2])) {
-            DISPLAY.textContent = 'недопустимое выражение';
-            setTimeout(clearDisplay, 1500);
-          } else {
-            DISPLAY.textContent = `${Number(stack[0]) ** 1 / Number(stack[2])}`;
-          }
-          break;
-        case '+':
-          DISPLAY.textContent = `${Number(stack[0]) + Number(stack[2])}`;
-          clearFlag = true;
-          break;
-        case '-':
-          DISPLAY.textContent = `${Number(stack[0]) - Number(stack[2])}`;
-          clearFlag = true;
-          break;
-        case '/':
-          if (Number(stack[0]) === 0 || Number(stack[2]) === 0) {
-            DISPLAY.textContent = 'недопустимое выражение';
-            setTimeout(clearDisplay, 1500);
-          } else {
-            DISPLAY.textContent = `${Number(stack[0]) / Number(stack[2])}`;
-            clearFlag = true;
-          } break;
-        case '*':
-          if (Number(stack[0]) === 0 || Number(stack[2]) === 0) {
-            DISPLAY.textContent = 'недопустимое выражение';
-            setTimeout(clearDisplay, 1500);
-          } else {
-            DISPLAY.textContent = `${Number(stack[0]) * Number(stack[2])}`;
-            clearFlag = true;
-          } break;
-        default: break;
-      }
-    }
-    if (stack[1] === stack[2] || stack[1] === '=') {
-      stack.splice(1, 1);
-    } else if (stack.length >= 3) {
-      stack.splice(0, 3);
-      stack.unshift(DISPLAY.textContent!);
-    }
-    clearFlag = true; */
 }
