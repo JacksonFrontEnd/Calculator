@@ -4,7 +4,6 @@ import {
 import { clearDisplay } from './math-function';
 
 export function delegationWrapper(): void {
-  const UNARY_OPERATORS = document.querySelectorAll('.operators');
   const OPERATORS = document.querySelectorAll('.operators');
   const NUMBERS = document.querySelectorAll('.numbers');
   const MEMORY_OPERATORS = document.querySelectorAll('.memory-operators');

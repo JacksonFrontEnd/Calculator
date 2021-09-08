@@ -8,37 +8,42 @@ const generateButton = (name:string, value:string) => {
   const nameArr = name.split(' ');
   let content = '';
   let classes = 'button';
+  let numberFlag = false;
   if (nameArr.length > 1) {
     if (nameArr.length === 3) {
       content = `<div class="sqrt">${nameArr[0]}</div>${nameArr[1] + nameArr[2]}`;
-    } else if ('Log'.indexOf(nameArr[0]) !== -1) {
+    } else if ('Log'.includes(nameArr[0])) {
       content = `${nameArr[0]}<div class="log">${nameArr[1]}</div>`;
     } else {
       content = `${nameArr[0]}<div class="pow">${nameArr[1]}</div>`;
     }
   } else {
-    content = nameArr[0];
+    [content] = nameArr;
   }
-  if (numbers.indexOf(nameArr[0]) !== -1 && nameArr.length === 1) {
+  if (numbers.includes(nameArr[0]) && nameArr.length === 1) {
     classes += ' numbers';
+    numberFlag = true;
   }
-  if (allOperation.join(' ').indexOf(nameArr[0]) !== -1 && nameArr.length > 1) {
+  if (allOperation.join(' ').includes(nameArr[0]) && nameArr.length > 1) {
     classes += ' operators';
   }
-  if (baseOperation.indexOf(nameArr[0]) !== -1) {
+  if (baseOperation.includes(nameArr[0])) {
     classes += ' operators orange';
   }
-  if ('='.indexOf(nameArr[0]) !== -1) {
+  if ('='.includes(nameArr[0])) {
     classes += ' orange equal';
   }
-  if (memoryArray.indexOf(nameArr[0]) !== -1) {
+  if (memoryArray.includes(nameArr[0])) {
     classes += ' memory-operators';
   }
-  if ('AC'.indexOf(nameArr[0]) !== -1) {
+  if ('AC'.includes(nameArr[0])) {
     classes += ' reset-button';
   }
-  if ('<'.indexOf(nameArr[0]) !== -1) {
+  if ('<'.includes(nameArr[0])) {
     classes += ' back-button';
+  }
+  if ('Ln.Log10'.includes(nameArr[0]) && !numberFlag) {
+    classes += ' operators';
   }
   if (nameArr.length === 0) {
     classes = 'button';
@@ -54,7 +59,6 @@ const renderButtons = () => {
 };
 export const Buttons = (root: HTMLElement): void => {
   const result = renderButtons();
-  console.log(result);
   const content = `
   <div class="buttons-container">
     <div class="base-operation">
