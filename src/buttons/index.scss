@@ -2,15 +2,10 @@
   display: flex;
   justify-content:center;
 }
-.custom-operation{
-  display: grid;
-  grid-template-rows: auto auto auto auto auto auto;
-  grid-template-columns: auto auto auto auto;
-}
 .base-operation{
- display: grid;
- grid-template-rows: auto auto auto auto auto;
- grid-template-columns: auto auto auto auto;
+  display: grid;
+  grid-template-rows: auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto auto auto auto;
 }
 .button{
   width: 100px;
@@ -21,14 +16,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.operation-last{
-  display: grid;
-  grid-template-rows: auto;
-  grid-template-columns: auto auto auto;
-}
-.big{
-  width: 200px;
 }
 .orange{
   background-color: orange;
