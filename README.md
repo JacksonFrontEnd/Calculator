@@ -3,7 +3,7 @@ Innowise Lab Internship Level 0 Custom calculator
 [TASK](https://docs.google.com/document/d/1j8DnTnRSNoRBdYtKu3Rgk1STLso4X5Rev2-oEyxMsK8/edit#)
 
 # Demo
-[Calculator](https://naughty-aryabhata-264b93.netlify.app/)
+[Calculator](https://pensive-fermi-b94538.netlify.app/)
 
 # How to run the app
 1. Clone this repo:
