@@ -1,1 +1,1 @@
-Deploy: https://quizzical-bell-48dbd4.netlify.app/
+Deploy: https://naughty-aryabhata-264b93.netlify.app/
