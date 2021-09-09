@@ -14,3 +14,4 @@ export const allOperation = ['(', ')', '+/-', '%', '/', '2 nd', 'x 2', '*', 'x 3
   'e x', '10 x', '-', '1/x', '2 √ x', '3 √ x', 'y √ x', '+', 'Ln', '='];
 export const numbers = '0123456789';
 export const memoryArray = ['MC', 'M+', 'M-', 'MR'];
+export const memory = [0];
