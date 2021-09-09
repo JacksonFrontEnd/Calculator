@@ -2,6 +2,7 @@ import { operationStack, out } from '../const/const';
 import { BaseOperationCommand } from '../command/calculate-base-operation';
 import { Calculator } from '../command/calculator';
 import { performanceMathOperation } from './base-math-function';
+import { clearWithDelay, setDataFromDisplay } from '../display/display-function';
 
 export function getPriority(s: string):number {
   switch (s) {
@@ -37,24 +38,6 @@ export function isUnaryOperator(s: string):boolean {
   }
   return false;
 }
-export function getDataFromDisplay():string {
-  return document.querySelector('.display-field')?.textContent ?? '0';
-}
-export const setDataFromDisplay = (str:string): void => {
-  const DISPLAY = document.querySelector('.display-field') as HTMLOutputElement;
-  DISPLAY.textContent = str;
-};
-export const addDataFromDisplay = (str:string): void => {
-  const DISPLAY = document.querySelector('.display-field') as HTMLOutputElement;
-  DISPLAY.textContent += str;
-};
-export const clearDisplay = ():void => {
-  setDataFromDisplay('0');
-};
-export const clearWithDelay = ():void => {
-  setDataFromDisplay('недопустимое выражение');
-  setTimeout(clearDisplay, 1500);
-};
 export const translateIntoOPZ = (input:string):string[] => {
   let bracketsFlag = false;
   const str = input.split(' ').filter((n) => n);
@@ -62,7 +45,7 @@ export const translateIntoOPZ = (input:string):string[] => {
   operationStack.length = 0;
   str?.forEach((elem) => {
     if (isOperator(elem)) {
-      if (elem.includes('(')) { // исправить
+      if (elem.includes('(')) {
         bracketsFlag = true;
       }
       if (elem.includes(')')) {

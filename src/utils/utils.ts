@@ -1,13 +1,15 @@
 import { BaseOperationCommand } from '../command/calculate-base-operation';
 import { Calculator } from '../command/calculator';
 import {
-  addDataFromDisplay,
-  calculateAllOperation,
-  clearDisplay,
   getDataFromDisplay,
+  setDataFromDisplay,
+  addDataFromDisplay,
+  clearDisplay,
+} from '../display/display-function';
+import {
+  calculateAllOperation,
   isOperator,
   isUnaryOperator,
-  setDataFromDisplay,
 } from '../logic/math-function';
 
 const calculator = new Calculator();
@@ -26,7 +28,7 @@ export const printSymbol = (symbol: string): void => {
     addDataFromDisplay(`${symbol} `);
   } else addDataFromDisplay(symbol);
 };
-export const perfomanceMemoryOperation = (memory_operation: string): void => {
+export const performanceMemoryOperation = (memory_operation: string): void => {
   let memory = 0;
   const number = Number(getDataFromDisplay());
   switch (memory_operation) {
@@ -48,7 +50,7 @@ export const perfomanceMemoryOperation = (memory_operation: string): void => {
       break;
   }
 };
-export const backOperation = ():void => {
+export const backOperation = (): void => {
   calculator.undo();
   setDataFromDisplay(String(calculator.getValue()));
 };

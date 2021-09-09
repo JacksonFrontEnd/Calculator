@@ -1,7 +1,7 @@
 import {
-  perfomanceMemoryOperation, performanceOperation, printSymbol, backOperation,
-} from '../const/utils';
-import { clearDisplay } from './math-function';
+  performanceMemoryOperation, performanceOperation, printSymbol, backOperation,
+} from '../utils/utils';
+import { clearDisplay } from '../display/display-function';
 
 export function delegationWrapper(): void {
   const OPERATORS = document.querySelectorAll('.operators');
@@ -28,7 +28,7 @@ export function delegationWrapper(): void {
     const operationBtn = MEMORY_OPERATORS[i];
     operationBtn.addEventListener('click', (e) => {
       const input = e.target as HTMLButtonElement;
-      perfomanceMemoryOperation(input.value ?? '0');
+      performanceMemoryOperation(input.value ?? '0');
     });
   }
   EQUAL.addEventListener('click', () => {
