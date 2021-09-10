@@ -1,12 +1,13 @@
+import { GenerateButtonType } from '../utils/types';
 import { btns } from './config';
 import './index.scss';
 
-const generateButton = (content:string, value:string, classes:string) => `
+const generateButton = ({ content, value, classes }: GenerateButtonType) => `
 <button class="button ${classes}" value="${value}">${content}</button>`;
 const renderButtons = () => {
   let res = '';
   btns.forEach((element) => {
-    res += generateButton(element.operator, element.value, element.classes);
+    res += generateButton(element);
   });
   return res;
 };

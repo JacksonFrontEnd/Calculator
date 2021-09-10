@@ -3,6 +3,7 @@ import { BaseOperationCommand } from '../command/calculate-base-operation';
 import { Calculator } from '../command/calculator';
 import { performanceMathOperation } from './base-math-function';
 import { clearWithDelay, setDataFromDisplay } from '../display/display-function';
+import { CalculateType, TwoNumbers } from '../utils/types';
 
 export function getPriority(s: string):number {
   switch (s) {
@@ -20,11 +21,11 @@ export function getPriority(s: string):number {
     default: return 8;
   }
 }
-export function divisionMultiplyByZero(num1:number, num2:number): boolean {
+export function divisionMultiplyByZero({ num1, num2 }: TwoNumbers): boolean {
   if (num1 === 0 || num2 === 0) return true;
   return false;
 }
-export function isNegativeRadical(num1:number, num2:number): boolean {
+export function isNegativeRadical({ num1, num2 }: TwoNumbers): boolean {
   if (num1 < 0 || num2 < 0) return true;
   return false;
 }
@@ -69,24 +70,24 @@ export const translateIntoOPZ = (input:string):string[] => {
   return out.concat(operationStack.reverse());
 };
 export function calculateOPZ(input: string[]):string {
-  let n1 = 0;
-  let n2 = 0;
+  let num1 = 0;
+  let num2 = 0;
   let isNull = false;
   operationStack.splice(0, operationStack.length);
-  input.forEach((elem) => {
-    if (!Number.isNaN(Number(elem))) {
-      operationStack.push(elem);
+  input.forEach((operator) => {
+    if (!Number.isNaN(Number(operator))) {
+      operationStack.push(operator);
     } else {
-      n2 = Number(operationStack.pop());
-      n1 = Number(operationStack.pop());
-      if (divisionMultiplyByZero(n1, n2) && '/*'.includes(elem)) {
+      num2 = Number(operationStack.pop());
+      num1 = Number(operationStack.pop());
+      if (divisionMultiplyByZero({ num1, num2 }) && '/*'.includes(operator)) {
         isNull = true;
       }
-      if (isNegativeRadical(n1, n2) && '√'.includes(elem)) {
+      if (isNegativeRadical({ num1, num2 }) && '√'.includes(operator)) {
         isNull = true;
       }
       if (!isNull) {
-        operationStack.push(String(performanceMathOperation(n1, n2, elem)));
+        operationStack.push(String(performanceMathOperation({ num1, num2, operator })));
       }
     }
   });
@@ -96,7 +97,7 @@ export function calculateOPZ(input: string[]):string {
   }
   return String(Number(operationStack.pop()).toFixed(3)) ?? '0';
 }
-export const calculateAllOperation = (str: string, calculator: Calculator):void => {
+export const calculateAllOperation = ({ str, calculator }:CalculateType):void => {
   calculator.executeCommand(new BaseOperationCommand(str));
   setDataFromDisplay(calculateOPZ(translateIntoOPZ(str)));
 };

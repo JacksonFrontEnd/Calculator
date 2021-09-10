@@ -16,7 +16,8 @@ import {
 
 const calculator = new Calculator();
 export const performanceOperation = (): void => {
-  calculateAllOperation(getDataFromDisplay() ?? '0', calculator);
+  const str = getDataFromDisplay();
+  calculateAllOperation({ str, calculator });
 };
 export const printSymbol = (symbol: string): void => {
   if ('0'.indexOf(getDataFromDisplay()) !== -1) {
@@ -67,7 +68,6 @@ export const performanceMemoryOperation = (memory_operation: string): void => {
     }
   }
 };
-
 export const backOperation = (): void => {
   calculator.undo();
   setDataFromDisplay(String(calculator.getValue()));
