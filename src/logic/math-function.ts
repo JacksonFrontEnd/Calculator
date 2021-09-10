@@ -94,7 +94,7 @@ export function calculateOPZ(input: string[]):string {
     clearWithDelay();
     isNull = false;
   }
-  return operationStack.pop() ?? '0';
+  return String(Number(operationStack.pop()).toFixed(3)) ?? '0';
 }
 export const calculateAllOperation = (str: string, calculator: Calculator):void => {
   calculator.executeCommand(new BaseOperationCommand(str));
