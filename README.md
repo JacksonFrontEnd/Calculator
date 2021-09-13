@@ -1,1 +1,1 @@
-Deploy: https://naughty-aryabhata-264b93.netlify.app/
+[Deploy] https://hardcore-goldberg-250d5e.netlify.app/
