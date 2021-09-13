@@ -3,7 +3,7 @@ Innowise Lab Internship Level 0 Custom calculator
 [TASK](https://docs.google.com/document/d/1j8DnTnRSNoRBdYtKu3Rgk1STLso4X5Rev2-oEyxMsK8/edit#)
 
 # Demo
-[Calculator](https://pensive-fermi-b94538.netlify.app/)
+[Calculator](https://hardcore-goldberg-250d5e.netlify.app/)
 
 # How to run the app
 1. Clone this repo:
@@ -31,7 +31,8 @@ Innowise Lab Internship Level 0 Custom calculator
 # Folders sturture
 ```
 └──src
-    ├──buttons					        
+    ├──buttons
+    	├──config.scss
         ├──index.scss
         └──index.ts
     ├──command						        
@@ -48,6 +49,7 @@ Innowise Lab Internship Level 0 Custom calculator
         ├──math-function.ts
         └──index.ts
     ├──utils
+    	├──types.ts
         └──utils.ts
     
     ├──app.ts					
